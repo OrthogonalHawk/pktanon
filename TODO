@@ -1,0 +1,44 @@
+============
+=== Bugs ===
+============
+
+- Fehlermeldung reading pcap header failed bei den letzten paketen wenn mit BufferedFile arbeite. Scheint Problem mit iostream.good und iostream.eof zu sein. Unter Windows ist das Problem n�mlich nicht.
+- The transformed dump is smaller then the original if using identity.
+- Average packet size shrinks after anonymization. Different ethernet padding the reason?
+- After anonymization the number of packets shrinks. Using AnonConstOverwrite or AnonShorten differ.
+
+==================
+=== TODO items ===
+================== 
+
+
+- Wenn man printpackets macht und in den ausgabe ist payload, dann können darin sonderzeichen sein. diese machen unter umständen sogar die konsole völlig kaputt da sie steuerzeichen sind ... filtern?
+- Bei printpackets wäre es doch gut wenn man in 2 dateien schreiben könnte. dann könnte man mit winmerge oder halt nem dif programm direkt die unterschiede zeigen.
+- Auf 64bit umstellen -> boost cstdint verwenden uint8_t etc
+- Big endian machines? muss einfach die swapping macros (swap16, swap32) ändern? ist damit alles erledigt?
+- Wie auch bei Distack support f�r RAW_IP traces, welche keinen Ethernet header beinhalten.
+- Some TODOs in the source
+- Better handling for tcp and ip options and flags
+- Better handling for different icmp items
+- Need handling for ipv6 extension headers 
+
+====================
+=== Future plans ===
+====================
+
+==> Support for hardware crypto cards
+- Checksum offloading
+-- http://www.microsoft.com/whdc/device/network/taskoffload.mspx
+-- http://www.cs.duke.edu/ari/trapeze/freenix/node7.html
+-- http://www.realtek.com.tw/products/products1-2.aspx?modelid=2005091
+- Hashing offloading
+-- http://www.bull.com/trustway/cryptocard_tech.html
+-- http://www-03.ibm.com/security/cryptocards/
+-- http://www.safenet-inc.com/products/pki/lunaPCI.asp
+-- http://www.banksys.com/bkscomwt/DE/Produkte_und_Loesungen/Hardware_security_modules/DEP_PCI/index.jsp
+- Random Number generator
+
+==> Multithreading 
+- Implement Multithreading for MultiCore processors
+
+==> Configuration- and Running-GUI

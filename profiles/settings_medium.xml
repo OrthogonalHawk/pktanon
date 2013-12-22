@@ -1,0 +1,188 @@
+
+<triggerconf>
+
+	<module name="Settings">
+		
+     <submodule name="Flow">
+			  <configitem name="Input">INFILE</configitem>
+			  <configitem name="Output">OUTFILE</configitem>
+		 </submodule>
+
+		 <submodule name="Misc">
+			  <configitem name="UseMeasure">0</configitem>
+			  <configitem name="MeasureFile"></configitem>
+			  <configitem name="CreatePlot">0</configitem>
+			  <configitem name="PrintPackets">0</configitem>
+              <configitem name="SingleStepping">0</configitem>
+              <configitem name="BlockSizeRead"></configitem>
+              <configitem name="BlockSizeWrite"></configitem>
+		  </submodule>
+		
+		  <submodule name="Checksumming">
+				  <configitem name="ReCalculateChecksums">1</configitem>
+				  <configitem name="SetBadChecksumsToBad">1</configitem>
+		  </submodule>
+		
+	</module>
+
+	<module name="AnonMappings">
+	
+  <!--
+            ~ Description of the anonmyization configitems ~
+            
+                To map anonymization primitives to protocol
+                attributes you have to add a configitem 
+                to the specified protocol attribute.
+                The following attributes are available in the
+                different protocols:
+                
+                EthernetPacket
+                    MacSouce            -   the source mac address
+                    MacDest             - the destination mac address
+                    MacType             - the type attribute which specified the next higher protocol
+				VlanPacket
+					VlanPriority		- Priority Code Point
+					VlanCfi				- Canonical Format Indicator
+					VlanId				- VLAN Identifier
+					VlanType			- next header
+                ArpPacket
+                    ArpHardwaretp - hardware type
+                    ArpPrototp      - protocol type
+                    ArpHardwareaddrlen- hardware address length
+                    ArpProtoaddlen- protocl address length
+                    ArpOpcode           - opcode
+                    ArpSourcemac    - source mac address
+                    ArpSourceip     - source ip address
+                    ArpDestmac      - destination mac address       
+                    ArpDestip           - destination ip address
+                IpPacket        
+                    IpTos                   - type of service
+                    IpIdent             - identifier
+                    IpFragoffset    - fragmentation offset
+                    IpFlags             - ip flags
+                    IpTtl                   - time to live
+                    IpSourceip      - source ip address
+                    IpDestip            - destination ip address
+                    IpOptions           - ip options
+                Ipv6Packet
+                    Ipv6Trafficclass- traffic class
+                    Ipv6Flowlabel   - flow label
+                    Ipv6Hoplimit    - hop limit
+                    Ipv6Sourceaddr- source address
+                    Ipv6Destaddr    - destination address
+                UdpPacket       
+                    UdpSourceport   - the source port
+                    UdpDestport     - the dest port
+                TcpPacket
+                    TcpSourceport   - the source port
+                    TcpDestport     - the dest port
+                    TcpSeqnum           - sequence number
+                    TcpAcknum           - ack number
+                    TcpFlags            - flags
+                    TcpWindowsize   - window size
+                    TcpUrgentpnt    - urgent pointer
+                    TcpOptions      - tcp options
+                IcmpPacket
+                    IcmpType            - type
+                    IcmpCode            - code
+                    IcmpMisc            - misc, depending on type and code
+                PayloadPacket
+                    PayloadPacketData - the data
+                
+                
+                The following anonymization primitives are
+                available. They need sometimes specified 
+                attributes:
+    
+                primitive                   |   additional attributes           | description
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                AnonIdentity                |   -                                                       | keep the current value
+                AnonRandomize               | -                                                     | overwrite with random byte values
+                AnonConstOverwrite          | anonval (hexvalue like 0xFF)| overwrite with a constant byte value
+                AnonShorten                 | newlen  (decimal value)           | shorten the buffer to the new length. will only have affect on variable length attributes (attributes that have a variable length in the protocol definition).
+                AnonContinuousChar          | -                                                     | each byte will get a continuous value
+                AnonHashSha1                | -                                                     | hash the complete buffer with sha1
+                AnonBytewiseHashSha1        | -                                                     | hash each byte of the buffer with sha1
+                AnonHashHmacSha1            | key (the key for the hmac)    | hash the complete buffer with hmac sha1
+                AnonBytewiseHashHmacSha1    | key (the key for the hmac)    | hash each byte with hmac sha1
+                AnonShuffle                 |   -                                                       | randomly shuffles the bytes in the buffer
+                AnonWhitenoise              | strength (decimal 1-10)       | flips a random number of bits at random positions in the buffer. The strength attribute specifies how agressively the noise is applied (1 is weak, 10 is strong)
+                AnonCryptoPan               | key (the key for rijandel)    | CryptoPan implementation
+                AnonBroadcastHandler        |                               | preserve broadcast addresses (all bytes set to 0xFF)
+                ...
+                
+    -->
+        
+		  <submodule name="EthernetPacket">
+			  <configitem anon="AnonBytewiseHashSha1" name="MacSource"/>
+			  <configitem anon="AnonBytewiseHashSha1" name="MacDest"/>
+			  <configitem anon="AnonIdentity" name="MacType"/>
+			</submodule>
+			
+			<submodule name="VlanPacket">
+			  	<configitem anon="AnonIdentity" name="VlanPriority" />
+			  	<configitem anon="AnonIdentity" name="VlanCfi"/>
+			  	<configitem anon="AnonBytewiseHashSha1" name="VlanId"/>
+			  	<configitem anon="AnonIdentity" name="VlanType"/>
+			</submodule>
+			
+			<submodule name="ArpPacket">
+				  <configitem anon="AnonIdentity" name="ArpHardwaretp"/>
+				  <configitem anon="AnonIdentity" name="ArpPrototp"/>
+				  <configitem anon="AnonIdentity" name="ArpHardwareaddrlen"/>
+				  <configitem anon="AnonIdentity" name="ArpProtoaddrlen"/>
+				  <configitem anon="AnonIdentity" name="ArpOpcode"/>
+				  <configitem anon="AnonBytewiseHashSha1" name="ArpSourcemac"/>
+				  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="ArpSourceip"/>
+				  <configitem anon="AnonBytewiseHashSha1" name="ArpDestmac"/>
+				  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="ArpDestip"/>	
+			</submodule>
+  
+		  <submodule name="IpPacket">
+			  <configitem anon="AnonConstOverwrite" anonval="0x00" name="IpTos"/>
+			  <configitem anon="AnonIdentity" name="IpIdent"/>
+			  <configitem anon="AnonIdentity" name="IpFlags"/>
+			  <configitem anon="AnonIdentity" name="IpFragoffset"/>
+			  <configitem anon="AnonWhitenoise" strength="3" name="IpTtl"/>
+			  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="IpSourceip"/>
+			  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="IpDestip"/>
+			  <configitem anon="AnonShorten" newlen="0" name="IpOptions"/>
+		</submodule>
+		
+			<submodule name="Ipv6Packet">
+				  <configitem anon="AnonIdentity" name="Ipv6Trafficclass"/>
+				  <configitem anon="AnonIdentity" name="Ipv6Flowlabel"/>
+				  <configitem anon="AnonWhitenoise" strength="3" name="Ipv6Hoplimit"/>
+				  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="Ipv6Sourceaddr"/>
+				  <configitem anon="AnonBytewiseHashHmacSha1" key="KEY" name="Ipv6Destaddr"/>
+			</submodule>
+		
+		  <submodule name="UdpPacket">
+			  <configitem anon="AnonBytewiseHashSha1" name="UdpSourceport"/>
+			  <configitem anon="AnonBytewiseHashSha1" name="UdpDestport"/>
+		</submodule>
+	
+		 <submodule name="TcpPacket">
+			  <configitem anon="AnonBytewiseHashSha1" name="TcpSourceport" />
+			  <configitem anon="AnonBytewiseHashSha1" name="TcpDestport" />
+			  <configitem anon="AnonIdentity" name="TcpSeqnum" />
+			  <configitem anon="AnonIdentity" name="TcpAcknum" />
+			  <configitem anon="AnonIdentity" name="TcpFlags" />
+			  <configitem anon="AnonIdentity" name="TcpWindowsize"/>
+			  <configitem anon="AnonConstOverwrite" anonval="0x00" name="TcpUrgentpnt" />
+			  <configitem anon="AnonShorten" newlen="0" name="TcpOptions" />
+		</submodule>
+		
+		  <submodule name="IcmpPacket">
+				  <configitem anon="AnonIdentity" name="IcmpType"/>	
+				  <configitem anon="AnonIdentity" name="IcmpCode"/>	
+				  <configitem anon="AnonIdentity" name="IcmpMisc"/>	
+		</submodule>
+		
+		  <submodule name="PayloadPacket">
+				  <configitem anon="AnonShorten" name="PayloadPacketData" newlen="0"/>
+		</submodule>
+	
+	</module>
+
+</triggerconf>

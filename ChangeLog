@@ -1,0 +1,50 @@
+v1.4.0 - current development version
++ Support for VLAN tags
+
+v1.3.0
++ Now runs on 32bit and 64bit.
+	
+v1.2.3
+! Fixed compilation problems that were caused by the header restructuring
+of gcc-4.3.
+
+v1.2.2
+! Fixed Packet chain dropping in case of incomplete dump recodings after IP packet.
+! Fixed some toString methods in the packet parsers, nicer output when using PrintPackets.
+! All console output (including printing textual packets) is done using cerr, this way nothing inferes with piping anonymized packet content to stdout.
+! Fixed memory leaks.
+! Nicer default console output.
+
+v1.2.1
+! Fixed compilation error under FreeBSD.
+
+v1.2.0
+! Fixed incorrect IPv6 attribute handling.
++ Completed IPv6 implementation.
+! Fixed checksumming errors in UDP and TCP.
+! Some internal bugfixes, code improvements.
+! Completed TCP and UCP checksumming over IPv6.
+! Fixed IPv6 address textual representation for PrintPackets.
++ If measuring is on, you can set the MeasureFile configitem in the XML configuration. Pktanon will print the measuremarks into this file. Measuremarks are not printed to the console anymore. If no MeasureFile is given and UseMeasure is on, only statistic summary is printed to the console.
++ Can use the CreatePlot configitem in the XML configuration to automatically create a plot with the anonymization-run throughput. Only works if UseMeasure is on and MeasureFile is set.
++ Added BufferedFile for configurable block-based read and write file operations.
+
+v1.2.0
++ Added single packet stepping for watching packets with printpackets.
+! Fixed IP options / invalid length field bug.
+! Fixed TCP options / invalid length field bug.
+
+v1.1.0
++ Xml based anon primitive mapping for current protocols.
++ All configuration is now in the xml config.
+! Handle ethernet padding correctly in the network protocol.
++ Support for arp and ipv6.
++ Can switch checksumming off.
++ Switch to check for bad checksums. If as checksum is bad it is set to bad again.
++ Lots of new anonymization primitives that can be mapped to the protocol attributes using the xml config.
+! Lots of bug fixes.
+! Better timer handling for measurement.
+! Fixed IP options bug.
+
+v1.0.0
++ First final version.
