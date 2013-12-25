@@ -17,6 +17,7 @@
 //
 
 #include "Timer.h"
+#include "unistd.h"
 
 Timer::Timer ()
 :	userdata	(NULL),
